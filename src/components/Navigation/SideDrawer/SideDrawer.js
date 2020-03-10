@@ -3,7 +3,7 @@ import Styles from './SideDrawer.module.css';
 import Logo from '../../layout/Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import Backdrop from '../../UI/Backdrop/Backdrop';
-import Aux from '../../../hoc/Aux';
+import Aux from '../../../hoc/Aux/Aux';
 
 const SideDrawer = (props)=>{
     // We are adding extra logic here to style icons when this gets shown.
