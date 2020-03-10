@@ -1,6 +1,6 @@
 import React from 'react';
 import Styles from './SideDrawer.module.css';
-import Logo from '../../layout/Logo/Logo';
+import Logo from '../../../hoc/layout/Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import Backdrop from '../../UI/Backdrop/Backdrop';
 import Aux from '../../../hoc/Aux/Aux';
