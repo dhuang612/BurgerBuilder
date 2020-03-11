@@ -6,6 +6,10 @@
 # testing
 /coverage
 
+# api routes
+axiosApiCall.js
+
+
 # production
 /build
 
