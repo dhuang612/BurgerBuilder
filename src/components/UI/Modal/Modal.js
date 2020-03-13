@@ -3,7 +3,7 @@ import styles from './Modal.module.css';
 import Aux from '../../../hoc/Aux/Aux';
 import Backdrop from '../Backdrop/Backdrop';
 
-const Modal = (props)=> {
+const Modal = React.memo((props)=> {
     // showModal contains the state to show or hide
     console.log(props.showModal)
 return( props.showModal ?
@@ -14,6 +14,6 @@ return( props.showModal ?
     {props.children}
 </div></Aux> : null)
 
-}
+})
 
 export default Modal;
