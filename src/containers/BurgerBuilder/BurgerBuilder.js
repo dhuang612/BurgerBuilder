@@ -6,6 +6,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axiosApiCall';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 const INGREDIENT_PRICES = {
     salad: .5,
@@ -16,12 +17,7 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component{
 state ={
-    ingredients: {
-        salad: 0,
-        meat: 0,
-        cheese: 0,
-        bacon: 0,
-    },
+    ingredients: null,
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
@@ -122,60 +118,45 @@ continuePurchaseHandler = async () =>{
         for(let key in disabledInfo){
                 disabledInfo[key] = disabledInfo[key] <= 0
             }
-
-        console.log(disabledInfo)
-
-        let orderSummary = (
-            <OrderSummary ingredients={this.state.ingredients}
+            let orderSummary = null;
+            let burger = this.state.error ? <p>Ingredients cant be loaded</p> : <Spinner/>;
+        if(this.state.ingredients){
+            burger = (
+                <Aux>
+                    <Burger ingredients={this.state.ingredients}/>
+                    <BurgerControls
+                    addIngredient={this.addIngredientsHandler}
+                    removeIngredient={this.removeIngredientsHandler}
+                    disabled={disabledInfo}
+                    price={this.state.totalPrice}
+                    purchase={this.state.purchasable}
+                    order={this.purchaseHandler}/>
+                </Aux>
+            );
+            orderSummary = <OrderSummary ingredients={this.state.ingredients}
             cancelOrder={this.cancelPurchaseHandler}
             continueOrder={this.continuePurchaseHandler}
-            price={this.state.totalPrice}
-        />
-        )
+            price={this.state.totalPrice}/>;
+
+        }
+
         if(this.state.showSpinner){
             orderSummary = (<Spinner/>)
         }
 
         return(
             <Aux>
+
                 <Modal
                 showModal={this.state.purchasing}
                 displayBackdrop={this.cancelPurchaseHandler}
                 >
                     {orderSummary}
                 </Modal>
-
-               <Burger stateIngredients={this.state.ingredients}/>
-
-                <BurgerControls
-                    addIngredient={this.addIngredientsHandler}
-                    removeIngredient={this.removeIngredientsHandler}
-                    disabled={disabledInfo}
-                    price={this.state.totalPrice}
-                    purchase={this.state.purchasable}
-                    order={this.purchaseHandler}
-                />
+                {burger}
             </Aux>
-        )
+        );
     }
 }
 
-export default BurgerBuilder;
-
-/*
-
-OrderButtonHandler= (ingredients)=>{
-   const ingredientsState = {
-    ...this.state.ingredients
-   }
-  const sum = Object.keys(ingredients)
-   sum.map((igKey)=> {
-       return ingredients[igKey]
-   }).reduce((sum,el)=>{
-       return sum + el;
-   },0)
-   console.log(sum)
-   this.setState({purchasable: sum > 0})
-}
-*/
-
+export default withErrorHandler(BurgerBuilder, axios);
